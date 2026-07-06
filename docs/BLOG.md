@@ -232,5 +232,4 @@ cd ../.. && python -m src.firewall --port 8888 --upstream-host localhost --upstr
 
 ---
 
-*Built for MCP_HACK//26 in the "Secure & Govern MCP" category.*
 *Three layers of defense using four ecosystem integrations: agentgateway (governance) + MCP Tool Firewall (content security) + kagent (intelligence) + kmcp (deployment).*
