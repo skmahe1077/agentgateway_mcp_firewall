@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-tool-firewall
+  namespace: default
+  labels:
+    app: mcp-tool-firewall
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcp-tool-firewall
+  template:
+    metadata:
+      labels:
+        app: mcp-tool-firewall
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8888"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: firewall
+          image: mcp-tool-firewall:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8888
+              name: proxy
+            - containerPort: 8889
+              name: mcp-server
+          env:
+            - name: UPSTREAM_HOST
+              value: "malicious-mcp-server"
+            - name: UPSTREAM_PORT
+              value: "9999"
+            - name: AGENTGATEWAY_POD_IP
+              value: "agentgateway.default.svc.cluster.local"
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: firewall-anthropic
+                  key: ANTHROPIC_API_KEY
+                  optional: true
+          command: ["./start.sh"]
+          args:
+            - "--port=8888"
+            - "--upstream-host=$(UPSTREAM_HOST)"
+            - "--upstream-port=$(UPSTREAM_PORT)"
+            - "--config=/etc/firewall/firewall-config.yaml"
+            - "--trusted-gateways=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1"
+          volumeMounts:
+            - name: firewall-config
+              mountPath: /etc/firewall
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+      volumes:
+        - name: firewall-config
+          configMap:
+            name: firewall-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: firewall-config
+  namespace: default
+data:
+  firewall-config.yaml: |
+    thresholds:
+      block: 51
+      warn: 26
+    enabled_patterns:
+      - Prompt Injection
+      - Data Exfiltration
+      - Cross-Tool Manipulation
+      - Invisible Characters
+      - Obfuscated Payloads
+      - Description Anomalies
+      - Dangerous Commands
+      - SSRF / Internal Access
+      - Semantic Analysis
+    policies:
+      blocklist: []
+      allowlist: []
+      max_description_length: 5000
+      required_patterns:
+        - Prompt Injection
+        - Data Exfiltration
+        - Dangerous Commands
+        - SSRF / Internal Access
+      server_trust: []
+    semantic_analysis:
+      enabled: true
+      model: "claude-haiku-4-5-20251001"
+      confidence_threshold: 70
+      cache_size: 256
+    response_scanning:
+      enabled: true
+      detect_secrets: true
+      detect_pii: true
+      detect_data_leaks: true
+      redact_critical: true
+    kill_switch:
+      enabled: false
+    logging:
+      dir: "logs"
+      verbose: true
+      format: "jsonl"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-tool-firewall
+  namespace: default
+spec:
+  selector:
+    app: mcp-tool-firewall
+  ports:
+    - name: proxy
+      port: 8888
+      targetPort: 8888
+    - name: mcp-server
+      port: 8889
+      targetPort: 8889
+  type: ClusterIP

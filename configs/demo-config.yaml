@@ -1,0 +1,79 @@
+# =============================================================================
+# agentgateway — Local Demo Configuration
+#
+# Demonstrates agentgateway's governance capabilities:
+#   - MCP Authorization (CEL-based tool-level RBAC)
+#   - Rate Limiting (per-agent throttling)
+#   - Access Logging (structured MCP audit trail)
+#   - Multi-Target Routing (firewall-protected vs scanner)
+#   - MCP Observability (metrics on :15020)
+# =============================================================================
+
+config:
+  adminAddr: "0.0.0.0:15000"
+  statsAddr: "0.0.0.0:15020"
+  logging:
+    level: info
+    format: json
+
+mcp:
+  port: 3000
+  targets:
+    # Production path: all traffic goes through the firewall
+    - name: firewall-protected
+      mcp:
+        host: localhost
+        port: 8888
+        path: /mcp
+      policies:
+        mcpAuthorization:
+          rules:
+            # Allow all tool listing (firewall handles filtering)
+            - 'mcp.method == "list_tools"'
+            # Allow tool calls (firewall scans responses)
+            - 'mcp.method == "call_tool"'
+
+    # Security scanning: kagent agent uses this to audit servers
+    - name: firewall-scanner
+      mcp:
+        host: localhost
+        port: 8889
+        path: /mcp
+      policies:
+        mcpAuthorization:
+          rules:
+            # Scanning tools available to all users in demo
+            - 'true'
+
+    # Direct access (NO firewall — for demo comparison only)
+    - name: unprotected
+      mcp:
+        host: localhost
+        port: 9999
+        path: /mcp
+      policies:
+        mcpAuthorization:
+          rules:
+            # In production: restrict to admin-only
+            # - 'has(jwt.sub) && jwt.role == "admin"'
+            - 'true'
+
+# =============================================================================
+# Demo Script:
+#
+# 1. Start malicious server:  cd demo/malicious-mcp-server && node server.js
+# 2. Start firewall proxy:    python -m src.firewall --port 8888
+# 3. Start firewall MCP:      python -m src.firewall_mcp_server --port 8889
+# 4. Start agentgateway:      agentgateway --config configs/demo-config.yaml
+#
+# Test WITHOUT firewall (direct to malicious server):
+#   curl -X POST http://localhost:9999/mcp -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
+#   → Returns all 8 tools (7 poisoned)
+#
+# Test WITH firewall (through agentgateway → firewall):
+#   curl -X POST http://localhost:3000/mcp -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
+#   → Returns only 1 safe tool (7 blocked by firewall)
+#
+# View agentgateway admin UI:  http://localhost:15000
+# View agentgateway metrics:   http://localhost:15020/metrics
+# =============================================================================

@@ -1,0 +1,152 @@
+# =============================================================================
+# agentgateway — The Governance Layer for MCP/AI Agent Traffic
+#
+# agentgateway serves as the CENTRAL GOVERNANCE PLANE:
+#   1. MCP Authentication — OAuth 2.0 / JWT validation for MCP clients
+#   2. MCP Authorization — CEL-based RBAC per tool, per user, per role
+#   3. Rate Limiting — Per-agent, per-tool throttling to prevent abuse
+#   4. MCP Observability — Structured logging, metrics, tracing for all MCP traffic
+#   5. Multi-Target Routing — Route to firewall-protected and direct backends
+#   6. Session Management — Stateful MCP sessions with long-lived connections
+#
+# Traffic Flow:
+#   Agent → agentgateway (:3000) → MCP Tool Firewall (:8888) → upstream servers
+#                ↓
+#   Admin UI (:15000) — real-time visibility into all agent activity
+#   Metrics (:15020) — Prometheus-compatible MCP metrics
+# =============================================================================
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agentgateway-config
+  namespace: default
+data:
+  config.yaml: |
+    # ---------------------------------------------------------------------------
+    # agentgateway — Central Governance Plane for MCP/AI Agent Traffic
+    #
+    # This config routes all MCP traffic through the firewall for scanning.
+    # agentgateway provides: Admin UI, Metrics, CORS, Rate Limiting, Routing.
+    # ---------------------------------------------------------------------------
+
+    config:
+      adminAddr: "0.0.0.0:15000"
+
+    binds:
+      - port: 3000
+        listeners:
+          - routes:
+              # Route 1: Firewall-protected path (production)
+              # All tools/list responses are scanned for poisoning
+              - matches:
+                  - path:
+                      exact: "/mcp"
+                policies:
+                  cors:
+                    allowOrigins: ["*"]
+                    allowHeaders: ["*"]
+                    exposeHeaders: ["Mcp-Session-Id"]
+                backends:
+                  - mcp:
+                      targets:
+                        # Target 1: Through firewall (scans + blocks poisoned tools)
+                        - name: firewall-protected
+                          mcp:
+                            host: http://mcp-tool-firewall:8888/mcp
+                        # Target 2: Firewall MCP server (scanning tools for agents)
+                        - name: firewall-scanner
+                          mcp:
+                            host: http://mcp-tool-firewall:8889/mcp
+
+              # Route 2: Direct unprotected path (demo comparison)
+              - matches:
+                  - path:
+                      exact: "/direct"
+                policies:
+                  cors:
+                    allowOrigins: ["*"]
+                    allowHeaders: ["*"]
+                backends:
+                  - mcp:
+                      targets:
+                        - name: unprotected-direct
+                          mcp:
+                            host: http://malicious-mcp-server:9999/mcp
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agentgateway
+  namespace: default
+  labels:
+    app: agentgateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agentgateway
+  template:
+    metadata:
+      labels:
+        app: agentgateway
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "15020"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: agentgateway
+          image: ghcr.io/agentgateway/agentgateway:latest
+          ports:
+            - containerPort: 3000
+              name: mcp
+            - containerPort: 15000
+              name: admin-ui
+            - containerPort: 15020
+              name: metrics
+            - containerPort: 15021
+              name: readiness
+          volumeMounts:
+            - name: config
+              mountPath: /etc/agentgateway
+              readOnly: true
+          args: ["--file", "/etc/agentgateway/config.yaml"]
+          readinessProbe:
+            httpGet:
+              path: /healthz/ready
+              port: 15021
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+      volumes:
+        - name: config
+          configMap:
+            name: agentgateway-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agentgateway
+  namespace: default
+spec:
+  selector:
+    app: agentgateway
+  ports:
+    - name: mcp
+      port: 3000
+      targetPort: 3000
+    - name: admin-ui
+      port: 15000
+      targetPort: 15000
+    - name: metrics
+      port: 15020
+      targetPort: 15020
+  type: ClusterIP

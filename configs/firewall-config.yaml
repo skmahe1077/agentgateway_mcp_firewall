@@ -1,0 +1,80 @@
+# MCP Tool Firewall configuration
+
+thresholds:
+  block: 51    # Risk score >= 51 blocks the tool
+  warn: 26     # Risk score >= 26 generates a warning
+
+enabled_patterns:
+  - Prompt Injection
+  - Data Exfiltration
+  - Cross-Tool Manipulation
+  - Invisible Characters
+  - Obfuscated Payloads
+  - Description Anomalies
+  - Dangerous Commands
+  - SSRF / Internal Access   # Cloud metadata, localhost, private IPs
+  - Semantic Analysis        # LLM-based (requires ANTHROPIC_API_KEY)
+
+# Policy engine rules
+policies:
+  # Tools always allowed regardless of scan results
+  allowlist: []
+    # - tool_name: "known_safe_tool"
+    #   server: "trusted-server"
+
+  # Tools always blocked regardless of scan results
+  blocklist: []
+    # - tool_name: "known_bad_tool"
+    #   server: "*"
+
+  # Block tools with descriptions exceeding this length (0 = disabled)
+  max_description_length: 5000
+
+  # Patterns that cannot be disabled
+  required_patterns:
+    - Prompt Injection
+    - Data Exfiltration
+    - Dangerous Commands
+    - SSRF / Internal Access
+
+  # Per-server trust levels with custom thresholds
+  server_trust: []
+    # - server: "trusted-internal-server"
+    #   trust_level: "high"
+    #   block_threshold: 76
+    #   warn_threshold: 51
+    # - server: "untrusted-external-server"
+    #   trust_level: "low"
+    #   block_threshold: 30
+    #   warn_threshold: 15
+
+# Semantic analysis (LLM-based detection)
+# Catches attacks that bypass regex: paraphrased injections,
+# multi-language attacks, social engineering, and novel patterns
+semantic_analysis:
+  enabled: true                       # Set to false to disable
+  model: "claude-haiku-4-5-20251001"  # Fast model for real-time scanning
+  confidence_threshold: 70            # Only flag if confidence >= this (0-100)
+  cache_size: 256                     # LRU cache for repeated descriptions
+  # API key: set ANTHROPIC_API_KEY env var (never put keys in config files)
+
+# Response scanning (outbound)
+response_scanning:
+  enabled: true
+  detect_secrets: true
+  detect_pii: true
+  detect_data_leaks: true
+  redact_critical: true  # Auto-redact secrets scoring >= 80
+
+# Kill switch
+kill_switch:
+  enabled: false  # Set to true for emergency deny-all
+
+logging:
+  dir: "logs"
+  verbose: true
+  format: "jsonl"
+
+upstream:
+  host: "localhost"
+  port: 9999

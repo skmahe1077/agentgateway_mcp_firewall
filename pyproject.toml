@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentgateway-mcp-firewall"
+version = "1.0.0"
+description = "MCP Tool Poisoning Firewall — detects and blocks tool description poisoning attacks for agentgateway, kagent, and kmcp"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "MCP Firewall Team"},
+]
+keywords = [
+    "mcp",
+    "security",
+    "firewall",
+    "agentgateway",
+    "kagent",
+    "kmcp",
+    "tool-poisoning",
+    "ai-security",
+    "prompt-injection",
+    "model-context-protocol",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: System :: Networking :: Firewalls",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "aiohttp>=3.9.0",
+    "pyyaml>=6.0",
+    "anthropic>=0.39.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/YOUR_USERNAME/agentgateway-mcp-firewall"
+Repository = "https://github.com/YOUR_USERNAME/agentgateway-mcp-firewall"
+Issues = "https://github.com/YOUR_USERNAME/agentgateway-mcp-firewall/issues"
+
+[project.scripts]
+mcp-firewall = "src.firewall:main"
+mcp-firewall-server = "src.firewall_mcp_server:main"
+mcp-firewall-scan = "src.cli:scan_main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]

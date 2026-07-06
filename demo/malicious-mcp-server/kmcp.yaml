@@ -1,0 +1,62 @@
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: malicious-mcp-server
+  namespace: default
+  labels:
+    kagent.dev/discovery: enabled
+spec:
+  deployment:
+    image: "malicious-mcp-server:latest"
+    port: 9999
+    cmd: "node"
+    args: ["server.js"]
+    transportType: "stdio"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: malicious-mcp-server
+  namespace: default
+  labels:
+    app: malicious-mcp-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: malicious-mcp-server
+  template:
+    metadata:
+      labels:
+        app: malicious-mcp-server
+    spec:
+      containers:
+        - name: server
+          image: malicious-mcp-server:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9999
+          env:
+            - name: PORT
+              value: "9999"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: malicious-mcp-server
+  namespace: default
+spec:
+  selector:
+    app: malicious-mcp-server
+  ports:
+    - name: mcp
+      port: 9999
+      targetPort: 9999
+  type: ClusterIP

@@ -1,0 +1,447 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: default
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus:9090
+        isDefault: true
+        editable: true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-providers
+  namespace: default
+data:
+  dashboards.yaml: |
+    apiVersion: 1
+    providers:
+      - name: "MCP Firewall"
+        orgId: 1
+        folder: ""
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards
+          foldersFromFilesStructure: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: default
+data:
+  mcp-firewall.json: |
+    {
+      "annotations": { "list": [] },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 1,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "title": "Firewall Overview",
+          "type": "row",
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+          "collapsed": false
+        },
+        {
+          "title": "Total Scans",
+          "type": "stat",
+          "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_scans_total", "legendFormat": "Scans" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": { "steps": [{ "color": "blue", "value": null }] },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Tools Scanned",
+          "type": "stat",
+          "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_tools_scanned_total", "legendFormat": "Scanned" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": { "steps": [{ "color": "green", "value": null }] },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Tools Blocked",
+          "type": "stat",
+          "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_tools_blocked_total", "legendFormat": "Blocked" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "red", "value": 1 }
+                ]
+              },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Tools Safe",
+          "type": "stat",
+          "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_tools_safe_total", "legendFormat": "Safe" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": { "steps": [{ "color": "green", "value": null }] },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Kill Switch",
+          "type": "stat",
+          "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_kill_switch_enabled", "legendFormat": "Kill Switch" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "red", "value": 1 }
+                ]
+              },
+              "mappings": [
+                { "type": "value", "options": { "0": { "text": "OFF", "color": "green" }, "1": { "text": "ON", "color": "red" } } }
+              ],
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "none", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Uptime",
+          "type": "stat",
+          "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_uptime_seconds", "legendFormat": "Uptime" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "thresholds": { "steps": [{ "color": "blue", "value": null }] },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "none", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Attack Detection",
+          "type": "row",
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+          "collapsed": false
+        },
+        {
+          "title": "Detections by Attack Pattern",
+          "type": "barchart",
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_detections_total", "legendFormat": "{{pattern}}" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" }
+            }
+          },
+          "options": {
+            "orientation": "horizontal",
+            "showValue": "always",
+            "barWidth": 0.8,
+            "groupWidth": 0.7
+          }
+        },
+        {
+          "title": "Risk Score Distribution",
+          "type": "barchart",
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_risk_score_bucket", "legendFormat": "{{le}}" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" }
+            }
+          },
+          "options": {
+            "orientation": "vertical",
+            "showValue": "always"
+          }
+        },
+        {
+          "title": "Scanning Performance",
+          "type": "row",
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+          "collapsed": false
+        },
+        {
+          "title": "Scan Rate (per minute)",
+          "type": "timeseries",
+          "gridPos": { "h": 7, "w": 12, "x": 0, "y": 15 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "rate(mcp_firewall_scans_total[1m]) * 60", "legendFormat": "Scans/min" },
+            { "expr": "rate(mcp_firewall_tools_blocked_total[1m]) * 60", "legendFormat": "Blocked/min" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "custom": { "lineWidth": 2, "fillOpacity": 20 }
+            }
+          }
+        },
+        {
+          "title": "Avg Scan Duration",
+          "type": "stat",
+          "gridPos": { "h": 7, "w": 4, "x": 12, "y": 15 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_scan_duration_seconds_avg * 1000", "legendFormat": "Avg" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ms",
+              "thresholds": {
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 100 },
+                  { "color": "red", "value": 500 }
+                ]
+              },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Max Scan Duration",
+          "type": "stat",
+          "gridPos": { "h": 7, "w": 4, "x": 16, "y": 15 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_scan_duration_seconds_max * 1000", "legendFormat": "Max" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ms",
+              "thresholds": {
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 200 },
+                  { "color": "red", "value": 1000 }
+                ]
+              },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Policy Overrides",
+          "type": "stat",
+          "gridPos": { "h": 7, "w": 4, "x": 20, "y": 15 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_policy_overrides_total", "legendFormat": "Overrides" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "orange", "value": 1 }
+                ]
+              },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Response & Semantic Analysis",
+          "type": "row",
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 22 },
+          "collapsed": false
+        },
+        {
+          "title": "Response Scan Findings by Type",
+          "type": "barchart",
+          "gridPos": { "h": 7, "w": 12, "x": 0, "y": 23 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_response_findings_total", "legendFormat": "{{type}}" }
+          ],
+          "options": { "orientation": "horizontal", "showValue": "always" }
+        },
+        {
+          "title": "Semantic Analysis",
+          "type": "stat",
+          "gridPos": { "h": 7, "w": 4, "x": 12, "y": 23 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_semantic_scans_total", "legendFormat": "Scans" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": { "steps": [{ "color": "purple", "value": null }] },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Semantic Detections",
+          "type": "stat",
+          "gridPos": { "h": 7, "w": 4, "x": 16, "y": 23 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_semantic_detections_total", "legendFormat": "Detections" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "red", "value": 1 }
+                ]
+              },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        },
+        {
+          "title": "Semantic Cache Hits",
+          "type": "stat",
+          "gridPos": { "h": 7, "w": 4, "x": 20, "y": 23 },
+          "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+          "targets": [
+            { "expr": "mcp_firewall_semantic_cache_hits_total", "legendFormat": "Cache Hits" }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": { "steps": [{ "color": "blue", "value": null }] },
+              "color": { "mode": "thresholds" }
+            }
+          },
+          "options": { "graphMode": "area", "colorMode": "background", "textMode": "auto" }
+        }
+      ],
+      "schemaVersion": 39,
+      "tags": ["mcp", "firewall", "security"],
+      "templating": { "list": [] },
+      "time": { "from": "now-30m", "to": "now" },
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "MCP Tool Firewall",
+      "uid": "mcp-firewall-dashboard",
+      "version": 1
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: default
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:11.1.0
+          env:
+            - name: GF_SECURITY_ADMIN_USER
+              value: "admin"
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: "firewall"
+            - name: GF_AUTH_ANONYMOUS_ENABLED
+              value: "true"
+            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+              value: "Viewer"
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: datasources
+              mountPath: /etc/grafana/provisioning/datasources
+            - name: dashboard-providers
+              mountPath: /etc/grafana/provisioning/dashboards
+            - name: dashboards
+              mountPath: /var/lib/grafana/dashboards
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+      volumes:
+        - name: datasources
+          configMap:
+            name: grafana-datasources
+        - name: dashboard-providers
+          configMap:
+            name: grafana-dashboard-providers
+        - name: dashboards
+          configMap:
+            name: grafana-dashboards
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: default
+spec:
+  selector:
+    app: grafana
+  ports:
+    - port: 3000
+      targetPort: 3000
+  type: ClusterIP

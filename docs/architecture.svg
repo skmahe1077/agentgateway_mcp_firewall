@@ -1,0 +1,309 @@
+<svg width="100%" viewBox="0 0 680 940" xmlns="http://www.w3.org/2000/svg">
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .th { font-size: 14px; font-weight: 500; }
+  .ts { font-size: 12px; font-weight: 400; }
+  .arr { stroke: #888780; stroke-width: 1.5; }
+
+  /* Light mode defaults */
+  .c-blue rect { fill: #E6F1FB; stroke: #185FA5; }
+  .c-blue .th { fill: #0C447C; }
+  .c-blue .ts { fill: #185FA5; }
+
+  .c-teal rect { fill: #E1F5EE; stroke: #0F6E56; }
+  .c-teal .th { fill: #085041; }
+  .c-teal .ts { fill: #0F6E56; }
+
+  .c-purple rect { fill: #EEEDFE; stroke: #534AB7; }
+  .c-purple .th { fill: #3C3489; }
+  .c-purple .ts { fill: #534AB7; }
+
+  .c-coral rect { fill: #FAECE7; stroke: #993C1D; }
+  .c-coral .th { fill: #712B13; }
+  .c-coral .ts { fill: #993C1D; }
+
+  .c-pink rect { fill: #FBEAF0; stroke: #993556; }
+  .c-pink .th { fill: #72243E; }
+  .c-pink .ts { fill: #993556; }
+
+  .c-amber rect { fill: #FAEEDA; stroke: #854F0B; }
+  .c-amber .th { fill: #633806; }
+  .c-amber .ts { fill: #854F0B; }
+
+  .c-red rect { fill: #FCEBEB; stroke: #A32D2D; }
+  .c-red .th { fill: #791F1F; }
+  .c-red .ts { fill: #A32D2D; }
+
+  .c-green rect { fill: #EAF3DE; stroke: #3B6D11; }
+  .c-green .th { fill: #27500A; }
+  .c-green .ts { fill: #3B6D11; }
+
+  .c-gray rect { fill: #F1EFE8; stroke: #5F5E5A; }
+  .c-gray .th { fill: #444441; }
+  .c-gray .ts { fill: #5F5E5A; }
+
+  text.th { fill: #2C2C2A; }
+  text.ts { fill: #5F5E5A; }
+
+  @media (prefers-color-scheme: dark) {
+    text.th { fill: #D3D1C7; }
+    text.ts { fill: #B4B2A9; }
+    .arr { stroke: #B4B2A9; }
+
+    .c-blue rect { fill: #0C447C; stroke: #85B7EB; }
+    .c-blue .th { fill: #B5D4F4; }
+    .c-blue .ts { fill: #85B7EB; }
+
+    .c-teal rect { fill: #085041; stroke: #5DCAA5; }
+    .c-teal .th { fill: #9FE1CB; }
+    .c-teal .ts { fill: #5DCAA5; }
+
+    .c-purple rect { fill: #3C3489; stroke: #AFA9EC; }
+    .c-purple .th { fill: #CECBF6; }
+    .c-purple .ts { fill: #AFA9EC; }
+
+    .c-coral rect { fill: #712B13; stroke: #F0997B; }
+    .c-coral .th { fill: #F5C4B3; }
+    .c-coral .ts { fill: #F0997B; }
+
+    .c-pink rect { fill: #72243E; stroke: #ED93B1; }
+    .c-pink .th { fill: #F4C0D1; }
+    .c-pink .ts { fill: #ED93B1; }
+
+    .c-amber rect { fill: #633806; stroke: #EF9F27; }
+    .c-amber .th { fill: #FAC775; }
+    .c-amber .ts { fill: #EF9F27; }
+
+    .c-red rect { fill: #791F1F; stroke: #F09595; }
+    .c-red .th { fill: #F7C1C1; }
+    .c-red .ts { fill: #F09595; }
+
+    .c-green rect { fill: #27500A; stroke: #97C459; }
+    .c-green .th { fill: #C0DD97; }
+    .c-green .ts { fill: #97C459; }
+
+    .c-gray rect { fill: #444441; stroke: #B4B2A9; }
+    .c-gray .th { fill: #D3D1C7; }
+    .c-gray .ts { fill: #B4B2A9; }
+  }
+</style>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- kagent Security Auditor -->
+<g class="c-purple">
+  <rect x="370" y="30" width="270" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="505" y="50" text-anchor="middle" dominant-baseline="central">kagent security auditor</text>
+  <text class="ts" x="505" y="68" text-anchor="middle" dominant-baseline="central">AI agent (A2A skills)</text>
+</g>
+
+<!-- MCP Client -->
+<g class="c-gray">
+  <rect x="50" y="30" width="210" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="155" y="50" text-anchor="middle" dominant-baseline="central">MCP client / agent</text>
+  <text class="ts" x="155" y="68" text-anchor="middle" dominant-baseline="central">Inspector, IDE, CLI</text>
+</g>
+
+<!-- Arrow: Client to agentgateway -->
+<text class="ts" x="155" y="110" text-anchor="middle">JSON-RPC</text>
+<line x1="155" y1="86" x2="155" y2="134" class="arr" marker-end="url(#arrow)" stroke-width="0.5"/>
+
+<!-- Arrow: kagent to firewall MCP server -->
+<text class="ts" x="505" y="110" text-anchor="middle">MCP tools via :8889</text>
+<line x1="505" y1="86" x2="505" y2="134" class="arr" marker-end="url(#arrow)" stroke-width="0.5"/>
+
+<!-- LAYER 1: agentgateway -->
+<g class="c-blue">
+  <rect x="30" y="136" width="300" height="220" rx="16" stroke-width="0.5"/>
+  <text class="th" x="180" y="160" text-anchor="middle">Layer 1: governance</text>
+  <text class="ts" x="180" y="176" text-anchor="middle">agentgateway</text>
+</g>
+<g class="c-blue">
+  <rect x="48" y="190" width="126" height="36" rx="6" stroke-width="0.5"/>
+  <text class="ts" x="111" y="212" text-anchor="middle" dominant-baseline="central">AuthN (JWT/OAuth)</text>
+</g>
+<g class="c-blue">
+  <rect x="186" y="190" width="126" height="36" rx="6" stroke-width="0.5"/>
+  <text class="ts" x="249" y="212" text-anchor="middle" dominant-baseline="central">AuthZ (CEL RBAC)</text>
+</g>
+<g class="c-blue">
+  <rect x="48" y="236" width="126" height="36" rx="6" stroke-width="0.5"/>
+  <text class="ts" x="111" y="258" text-anchor="middle" dominant-baseline="central">Rate limiting</text>
+</g>
+<g class="c-blue">
+  <rect x="186" y="236" width="126" height="36" rx="6" stroke-width="0.5"/>
+  <text class="ts" x="249" y="258" text-anchor="middle" dominant-baseline="central">Access logging</text>
+</g>
+<g class="c-blue">
+  <rect x="48" y="282" width="264" height="36" rx="6" stroke-width="0.5"/>
+  <text class="ts" x="180" y="304" text-anchor="middle" dominant-baseline="central">Identity forwarding (X-Agentgateway-*)</text>
+</g>
+<text class="ts" x="180" y="338" text-anchor="middle">:3000 MCP  :15000 UI  :15020 metrics</text>
+
+<!-- LAYER 2: Firewall -->
+<g class="c-teal">
+  <rect x="350" y="136" width="300" height="220" rx="16" stroke-width="0.5"/>
+  <text class="th" x="500" y="160" text-anchor="middle">Layer 2: content security</text>
+  <text class="ts" x="500" y="176" text-anchor="middle">MCP tool firewall</text>
+</g>
+<g class="c-purple">
+  <rect x="368" y="190" width="264" height="36" rx="6" stroke-width="0.5"/>
+  <text class="ts" x="500" y="212" text-anchor="middle" dominant-baseline="central">MCP server (tools) :8889</text>
+</g>
+<g class="c-teal">
+  <rect x="368" y="236" width="126" height="36" rx="6" stroke-width="0.5"/>
+  <text class="ts" x="431" y="258" text-anchor="middle" dominant-baseline="central">Gateway lockdown</text>
+</g>
+<g class="c-teal">
+  <rect x="506" y="236" width="126" height="36" rx="6" stroke-width="0.5"/>
+  <text class="ts" x="569" y="258" text-anchor="middle" dominant-baseline="central">YAML policy engine</text>
+</g>
+<g class="c-teal">
+  <rect x="368" y="282" width="264" height="36" rx="6" stroke-width="0.5"/>
+  <text class="ts" x="500" y="304" text-anchor="middle" dominant-baseline="central">Kill switch (emergency deny-all)</text>
+</g>
+<text class="ts" x="500" y="338" text-anchor="middle">Proxy :8888  MCP server :8889</text>
+
+<!-- Identity header arrow between layers -->
+<line x1="330" y1="300" x2="366" y2="300" stroke="#185FA5" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+<text class="ts" x="348" y="322" text-anchor="middle" style="font-size:10px">headers</text>
+
+<!-- Arrows: layers to scanning -->
+<line x1="180" y1="356" x2="180" y2="376" class="arr" marker-end="url(#arrow)" stroke-width="0.5"/>
+<line x1="500" y1="356" x2="500" y2="376" class="arr" marker-end="url(#arrow)" stroke-width="0.5"/>
+
+<!-- INBOUND SCANNING -->
+<g class="c-coral">
+  <rect x="30" y="378" width="620" height="110" rx="12" stroke-width="0.5"/>
+  <text class="th" x="340" y="402" text-anchor="middle">Inbound scanning — 7 attack pattern detectors</text>
+</g>
+<g class="c-coral">
+  <rect x="48" y="416" width="118" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="107" y="432" text-anchor="middle" dominant-baseline="central">Prompt injection</text>
+</g>
+<g class="c-coral">
+  <rect x="174" y="416" width="110" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="229" y="432" text-anchor="middle" dominant-baseline="central">Data exfiltration</text>
+</g>
+<g class="c-coral">
+  <rect x="292" y="416" width="100" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="342" y="432" text-anchor="middle" dominant-baseline="central">Cross-tool ops</text>
+</g>
+<g class="c-coral">
+  <rect x="400" y="416" width="108" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="454" y="432" text-anchor="middle" dominant-baseline="central">Invisible chars</text>
+</g>
+<g class="c-coral">
+  <rect x="516" y="416" width="118" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="575" y="432" text-anchor="middle" dominant-baseline="central">Obfuscated b64</text>
+</g>
+<g class="c-coral">
+  <rect x="48" y="450" width="126" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="111" y="466" text-anchor="middle" dominant-baseline="central">Desc. anomalies</text>
+</g>
+<g class="c-coral">
+  <rect x="182" y="450" width="140" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="252" y="466" text-anchor="middle" dominant-baseline="central">Dangerous commands</text>
+</g>
+<g class="c-amber">
+  <rect x="400" y="450" width="234" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="517" y="466" text-anchor="middle" dominant-baseline="central">Risk scoring 0-100 → block ≥ 51</text>
+</g>
+
+<!-- Arrow: inbound to outbound -->
+<line x1="340" y1="488" x2="340" y2="508" class="arr" marker-end="url(#arrow)" stroke-width="0.5"/>
+
+<!-- OUTBOUND SCANNING -->
+<g class="c-pink">
+  <rect x="30" y="510" width="620" height="80" rx="12" stroke-width="0.5"/>
+  <text class="th" x="340" y="534" text-anchor="middle">Outbound response scanning</text>
+</g>
+<g class="c-pink">
+  <rect x="48" y="548" width="160" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="128" y="564" text-anchor="middle" dominant-baseline="central">Secrets (AWS, JWT, keys)</text>
+</g>
+<g class="c-pink">
+  <rect x="218" y="548" width="160" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="298" y="564" text-anchor="middle" dominant-baseline="central">PII (SSN, CC, email)</text>
+</g>
+<g class="c-pink">
+  <rect x="388" y="548" width="140" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="458" y="564" text-anchor="middle" dominant-baseline="central">Data leak detection</text>
+</g>
+<g class="c-pink">
+  <rect x="538" y="548" width="96" height="24" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="586" y="564" text-anchor="middle" dominant-baseline="central">Auto-redact</text>
+</g>
+
+<!-- Arrows: scanning to downstream -->
+<line x1="155" y1="590" x2="155" y2="622" class="arr" marker-end="url(#arrow)" stroke-width="0.5"/>
+<text class="ts" x="155" y="612" text-anchor="middle">filtered</text>
+<line x1="505" y1="590" x2="505" y2="622" class="arr" marker-end="url(#arrow)" stroke-width="0.5"/>
+<text class="ts" x="505" y="612" text-anchor="middle">audit events</text>
+
+<!-- Upstream MCP Server -->
+<g class="c-red">
+  <rect x="40" y="624" width="230" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="155" y="644" text-anchor="middle" dominant-baseline="central">Upstream MCP server</text>
+  <text class="ts" x="155" y="662" text-anchor="middle" dominant-baseline="central">Deployed via kmcp CRD :9999</text>
+</g>
+
+<!-- Audit Logs -->
+<g class="c-amber">
+  <rect x="390" y="624" width="250" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="515" y="644" text-anchor="middle" dominant-baseline="central">Identity-aware audit logs</text>
+  <text class="ts" x="515" y="662" text-anchor="middle" dominant-baseline="central">JSONL + gateway identity + who</text>
+</g>
+
+<!-- CLI Scanner -->
+<g class="c-green">
+  <rect x="40" y="720" width="230" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="155" y="740" text-anchor="middle" dominant-baseline="central">CLI: mcp-firewall-scan</text>
+  <text class="ts" x="155" y="758" text-anchor="middle" dominant-baseline="central">CI/CD gate (exit 0/1/2)</text>
+</g>
+
+<!-- CLI arrow up to upstream server -->
+<path d="M50 720 L50 680" fill="none" class="arr" marker-end="url(#arrow)" stroke-width="0.5"/>
+<text class="ts" x="32" y="700" text-anchor="middle" style="font-size:10px">scan</text>
+
+<!-- CLI arrow to scanning engine -->
+<path d="M270 738 L310 738 L310 488" fill="none" class="arr" marker-end="url(#arrow)" stroke-width="0.5" stroke-dasharray="4 3"/>
+<text class="ts" x="322" y="620" text-anchor="start" style="font-size:10px">same engine</text>
+
+<!-- Prometheus -->
+<g class="c-green">
+  <rect x="390" y="720" width="250" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="515" y="740" text-anchor="middle" dominant-baseline="central">Prometheus /metrics</text>
+  <text class="ts" x="515" y="758" text-anchor="middle" dominant-baseline="central">K8s auto-scrape annotations</text>
+</g>
+
+<!-- Prometheus scrape arrow from firewall layer -->
+<path d="M635 356 L635 695 L625 695 L625 720" fill="none" class="arr" marker-end="url(#arrow)" stroke-width="0.5" stroke-dasharray="4 3"/>
+<text class="ts" x="515" y="700" text-anchor="middle">scrapes: scans, blocked, patterns</text>
+
+<!-- Ecosystem footer -->
+<g class="c-gray">
+  <rect x="30" y="810" width="620" height="76" rx="12" stroke-width="0.5"/>
+  <text class="th" x="340" y="834" text-anchor="middle">Ecosystem integration</text>
+</g>
+<g class="c-blue">
+  <rect x="48" y="848" width="172" height="26" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="134" y="864" text-anchor="middle" dominant-baseline="central">agentgateway (core)</text>
+</g>
+<g class="c-purple">
+  <rect x="230" y="848" width="140" height="26" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="300" y="864" text-anchor="middle" dominant-baseline="central">kagent (AI agent)</text>
+</g>
+<g class="c-teal">
+  <rect x="380" y="848" width="130" height="26" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="445" y="864" text-anchor="middle" dominant-baseline="central">kmcp (K8s MCP)</text>
+</g>
+<g class="c-coral">
+  <rect x="520" y="848" width="114" height="26" rx="4" stroke-width="0.5"/>
+  <text class="ts" x="577" y="864" text-anchor="middle" dominant-baseline="central">26 tests passing</text>
+</g>
+
+</svg>
