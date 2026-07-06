@@ -1,7 +1,5 @@
 # agentgateway MCP Firewall with MCP Security Auditor Agent for Securing and Governing MCP Server Access
 
-[![MCP_HACK//26](https://img.shields.io/badge/MCP__HACK%2F%2F26-Secure%20%26%20Govern%20MCP-blue)](https://aihackathon.dev/)
-[![Category](https://img.shields.io/badge/Category-Secure%20%26%20Govern%20MCP-red)](https://aihackathon.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
 [![Tests](https://img.shields.io/badge/tests-46%20passed-brightgreen.svg)](#testing)
@@ -11,7 +9,6 @@
 
 **A three-layer defense system that secures and governs AI agent access to MCP tools combining [agentgateway](https://github.com/agentgateway/agentgateway) for governance with MCP Tool Firewall for content security.**
 
-Built for [MCP_HACK//26](https://aihackathon.dev/)  **Secure & Govern MCP** category.
 
 ### Ecosystem Integrations
 
@@ -447,7 +444,6 @@ tests/                      # 46 tests
 
 ## Links
 
-- [MCP_HACK//26](https://aihackathon.dev/)
 - [agentgateway](https://github.com/agentgateway/agentgateway)
 - [kagent](https://kagent.dev)
 - [kmcp](https://github.com/kagent-dev/kmcp)
